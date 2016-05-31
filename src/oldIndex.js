@@ -23,10 +23,14 @@
  */
 var APP_ID = undefined; //replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
 
+import Client from './Client';
+
 /**
  * The AlexaSkill prototype and helper functions
  */
 var AlexaSkill = require('./AlexaSkill');
+
+Client();
 
 /**
  * SpaceGeek is a child of AlexaSkill.

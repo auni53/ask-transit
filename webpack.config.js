@@ -7,9 +7,7 @@ module.exports = {
   entry: APP_DIR + '/index.js',
   output: {
     path: BUILD_DIR,
-    library: '[name]',
-    libraryTarget: 'commonjs2',
-    filename: '[name].js'
+    filename: 'index.js'
   },
   target: 'node',
   module: {
@@ -20,6 +18,10 @@ module.exports = {
         loader: 'babel',
         query: JSON.parse(
           require('fs').readFileSync(path.resolve(__dirname, '.babelrc'), 'utf8'))
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   }

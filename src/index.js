@@ -1,3 +1,5 @@
-export default function hello() {
-  console.log('Hello World');
-}
+import Client from './Client';
+
+console.log('lol');
+let ttcClient = new Client('ttc');
+ttcClient.load();
