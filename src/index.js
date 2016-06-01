@@ -1,5 +1,6 @@
 import Client from './Client';
 
-console.log('lol');
-let ttcClient = new Client('ttc');
-ttcClient.load();
+let ttcClient = new Client();
+ttcClient.load('ttc');
+console.log(ttcClient)
+

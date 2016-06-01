@@ -1,11 +1,8 @@
-import assert from 'assert';
-import 'babel-polyfill';
+import hello from '../src/hello.js'
 
-import hello from "../src/hello.js"
-
-describe("hello lambda", () => {
-  it("should greet the world by default", () => {
-    assert.equal(hello(), "Hello World");
+describe('Hello world', () => {
+  it('should greet the world by default', () => {
+    assert.equal(hello(), 'Hello World');
   });
 
 });

@@ -1,19 +1,31 @@
-import 'babel-polyfill';
-import chai, { expect } from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-chai.use(chaiAsPromised);
-
 import { get } from '../src/requests.js';
 
-describe('request helpers', function(done) {
-  
-  it('should get from a URL', function() {
-    const URL = 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=ttc';
- 
-    get(URL).then(r => console.log(r)); 
+describe('get() request', function() {
 
-    // expect(get(URL)).to.eventually.equal(5);
+  const url = {
+    valid:   'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=ttc',
+    broken:  'http://webservices.nextbus.com/service/',
+    invalid: 'http://nextbub.com/',
+  };
+  
+  it('returns a promise', function() {
+    return get(url.valid).should.be.a('promise');   
   });
 
+  it('returns fulfilled promise for a valid URL', function() { 
+    return get(url.valid).should.be.fulfilled;
+  });
+
+  it('returns a string for a valid URL', function() { 
+    return get(url.valid).should.eventually.be.a('String');
+  });
+
+  it('returns a 404 error with a broken page', function() { 
+    return get(url.broken).should.be.rejectedWith('404 error.');
+  });
+
+  it('should fail the request for an invalid URL', function() { 
+    return get(url.invalid).should.be.rejected;
+  });
 
 });

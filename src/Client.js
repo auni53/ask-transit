@@ -1,26 +1,17 @@
 import { get } from './requests';
 
 class Client {
-  constructor(agency) {
+  constructor() {
+  }
+
+  load(agency) {
     if (AGENCIES.filter(a => a === agency).length > 0) {
       this._agency = agency;
       this._routes;
       return (this._agency);
     } else throw new Error('agency not found');
-  }
-
-  load() {
     const URL = `http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=${this._agency}`;
 
-    console.log(`Getting ${URL}`);
-
-    return new Promise(
-      () => get(URL)
-          .then(r => r.json())
-          .catch(r => r.json())
-    );
-
-    this._routes;
   }
 
   // Getters
