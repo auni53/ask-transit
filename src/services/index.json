@@ -1,0 +1,5 @@
+{
+  "nextbus": [
+    "actransit", "jhu-apl", "art", "atlanta-sc", "brockton", "camarillo", "ccrta", "chapel-hill", "charles-river", "charm-city", "ccny", "oxford-ms", "collegetown", "cyride", "dc-circulator", "dc-streetcar", "da", "dumbarton", "ecu", "emery", "fairfax", "foothill", "ft-worth", "georgia-college", "glendale", "south-coast", "indianapolis-air", "jtafla", "lasell", "lametro", "lametro-rail", "mbta", "mit", "sf-mission-bay", "moorpark", "bronx", "brooklyn", "staten-island", "nova-se", "omnitrans", "pvpta", "sria", "portland-sc", "pgc", "reno", "radford", "howard", "roosevelt", "rutgers-newark", "rutgers", "sf-muni", "seattle-sc", "simi-valley", "stl", "sct", "thousand-oaks", "thunderbay", "ttc", "unitrans", "ucsf", "umd", "umn-twin", "vista", "wku", "winston-salem", "york-pa"
+  ]
+}

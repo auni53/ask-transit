@@ -1,6 +1,6 @@
-import { get } from '../src/requests.js';
+import { get } from '../src/helpers/requests.js';
 
-describe('get() request', function() {
+describe('get request helper', function() {
 
   const url = {
     valid:   'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=ttc',
@@ -9,7 +9,7 @@ describe('get() request', function() {
   };
   
   it('returns a promise', function() {
-    return get(url.valid).should.be.a('promise');   
+    return get(url.valid).should.be.a('promise');
   });
 
   it('returns fulfilled promise for a valid URL', function() { 

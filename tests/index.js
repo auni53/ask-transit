@@ -9,6 +9,7 @@ global.AssertionError = chai.AssertionError;
 global.Assertion = chai.Assertion;
 global.assert = chai.assert;
 
-require('./hello');
-require('./ClientTest');
-require('./requestsTest');
+// require('./hello');
+// require('./requestsTest');
+require('./ttcTest');
+// require('./ClientTest');

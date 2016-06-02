@@ -15,7 +15,9 @@
     "isomorphic-fetch": "^2.2.1",
     "json-loader": "^0.5.4",
     "mocha": "^2.5.3",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "xmldom": "^0.1.22",
+    "xpath": "0.0.23"
   },
   "devDependencies": {
     "fs": "0.0.2"
@@ -23,7 +25,8 @@
   "scripts": {
     "dev": "webpack -d --watch",
     "build": "webpack -p",
-    "test": "mocha --compilers js:babel-core/register --recursive tests/index.js"
+    "test": "mocha --compilers js:babel-core/register --recursive tests",
+    "single-test": "mocha --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
