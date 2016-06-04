@@ -1,0 +1,6 @@
+{
+  "debug": true,
+  "esnext": true,
+  "experimental": ["asyncawait", "asyncreqawait"],
+  "laxbreak": true
+}

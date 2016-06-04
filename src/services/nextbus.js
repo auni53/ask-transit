@@ -1,7 +1,6 @@
 import { get } from '../helpers/requests.js';
-
 import parse from '../helpers/xmlparse';
-import mapValues from 'lodash/mapvalues';
+import intersection from 'lodash/intersection';
 
 const getValue = e => e.value;
 
@@ -16,7 +15,9 @@ export function getRoutes(agency) {
   const query = 'body/route/@tag';
   const getQuery = doc => parse(doc, query).map(getValue);
 
-  return get(url).then(getQuery);
+  return get(url)
+          .then(getQuery)
+        ;
 }
 
 /** 
@@ -28,12 +29,10 @@ export function getRoutes(agency) {
  * @return {promise} times 
  */ 
 export function getStops(agency, route) {
-
   const url = `http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=${agency}&r=${route}`;
   const stopQuery = `body/route/stop/@stopId`;
   const dirQuery = `body/route/direction/@name`;
   return get(url).then(doc => {
-
       // Parse stop information for route
       const stops = {}, directions = {};
       const stopList = parse(doc, stopQuery).map(getValue);
@@ -56,7 +55,7 @@ export function getStops(agency, route) {
       }); 
       
       if ([...Object.keys(stops), ...Object.keys(directions)].length === 0) {
-        return Promise.reject(new Error(`${route} is not a ${agency} route.`))
+        return Promise.reject(Error(`${route} is not a ${agency} route.`));
       }
       return { stops, directions };
     });
@@ -73,35 +72,53 @@ export function getStops(agency, route) {
  * }
  * @return   {promise} times 
  */ 
-export function getTimes(agency, { stop, route, direction }) {
+export function getTimes(agency, { stop, routeNum, direction }) {
   const url = `http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=${agency}&stopId=${stop}`;
   let times = [];
-  console.log('GETTING TIMES 4 U');
-  console.log(url);
 
   return get(url).then(doc => {
-    console.log(doc);
-    const routes = parse(doc, `/body/predictions/@routeTag`).map(getValue);
-    let times = routes.map(route => {
+    const routeList = parse(doc, `/body/predictions/@routeTag`).map(getValue);
+  
+    if (routeList.length === 0) {
+      return Promise.reject(Error(`${stop} is not a ${agency} stop.`));
+    }
+
+    let times = routeList.map(route => {
       let label, times;
       const activeQuery = `/body/predictions[@routeTag="${route}"]/direction`;
       const inactiveQuery = `/body/predictions[@dirTitleBecauseNoPredictions and @routeTag=${route}]/@dirTitleBecauseNoPredictions`;
 
-      let activeLabel = parse(doc, activeQuery + '/@title');
-      if (activeLabel.length > 0) {
-        label = activeLabel[0].value;
-        times = parse(doc, activeQuery + '/prediction/@seconds').map(getValue);
-      } else {
-        label = parse(doc, inactiveQuery)[0].value;
-        times = null
+      try {
+        let activeLabel = parse(doc, activeQuery + '/@title');
+        if (activeLabel.length > 0) {
+          label = activeLabel[0].value.toLowerCase();
+          times = parse(doc, activeQuery + '/prediction/@seconds').map(getValue);
+        } else {
+          label = parse(doc, inactiveQuery)[0].value.toLowerCase();
+          times = null;
+        }
+      } catch (e) {
+        console.log('--ERROR--');
+        console.log(e);
+        console.log(route);
+        console.log(label);
       }
-      return { route, label, times };
+      return ({ route, label, times });
     });
-    return filter(times, { route, direction });
+
+    const validRoutes = times.filter(({route, label}) =>
+                             (!routeNum  || route === routeNum));
+    const validDirections = times.filter(({route, label}) =>
+                             (!direction || ~label.indexOf(direction)));
+    const validTimes = intersection(validRoutes, validDirections);
+
+    return (validTimes.length > 0)
+            ? validTimes
+            : Promise.reject(Error(
+              `route ${(routeNum ? routeNum + ' ': '') +
+                       (direction ? direction + ' ': '')
+                      }does not go to stop ${stop}.`
+                ));
+
   });
-}
-    
-function filter(times, { route, direction }) {
-  console.log(times);
-  return times;
 }

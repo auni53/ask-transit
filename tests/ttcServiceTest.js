@@ -1,50 +1,35 @@
 import { getRoutes, getStops, getTimes } from '../src/services/nextbus.js';
 import sample from './sample/ttc.json';
 
-describe('TTC service', () => {
+describe('TTC – nextbus service', () => {
   const agency = 'ttc';
   let route = '94';
   let direction = 'E'; 
-  let stop, response;
+  let stop, response, routeNum;
 
   it('gets a list of routes', function() {
     return getRoutes(agency)
             .should.be.fulfilled.and
             .should.eventually.include.members(sample.routes).and
-            .should.eventually.not.include('1000')
+            .should.eventually.have.lengthOf(sample.routes.length)
           ;
   });
 
   it('gets stops for route 94', function() {
-    return getStops(agency, route, direction)
+    return getStops(agency, route)
             .should.be.fulfilled.and
-            .should.eventually.deep.equal(sample['94'])
+           .should.eventually.deep.equal(sample['94'])
           ;
   });
 
   it('fails to get stops for route 1000', function() {
-    route = '1000';
-    return getStops(agency, route)
-            .should.be.rejectedWith("1000 is not a ttc route.")
+    return getStops(agency, '1000')
+            .should.rejectedWith("1000 is not a ttc route.")
           ;
   });
 
-  it('gets times at stop #15298 (Ossington Station)', function() {
-    /*
-     * [
-     *   {
-     *     'route': '94',
-     *     'label': 'East - 94 Wellesley towards Castle Frank Station',
-     *     'times': [31, 432, 994]
-     *   },
-     *   {
-     *     'route': '161',
-     *     'label': 'West - 161 Rogers Rd towards Jane',
-     *     'times':  [850, 1714, 2614] 
-     *   }
-     * ]
-     */
-      
+  it('gets times at #15298 (Ossington Station)', function() {
+    route = '94';      
     stop = '15298';
     return getTimes(agency, { stop })
             .should.be.fulfilled.and
@@ -58,47 +43,50 @@ describe('TTC service', () => {
   });
 
   it('gets times for 94E at #15298 (Ossington Station)', function() {
-    /*
-     * [
-     *   {
-     *     'route': '94',
-     *     'label': 'East - 94 Wellesley towards Castle Frank Station',
-     *     'times': [179, 642, 1056, 1567, 2167],
-     *   }, 
-     * ]
-     */
-
     stop = '15298';
+    routeNum = route;
+    direction = 'east';
     return Promise.all([
-      getTimes(agency, { stop, route, direction })
+      getTimes(agency, { stop, routeNum, direction })
           .should.be.fulfilled.and
-          .should.be.a('array').and
-          .should.have.lengthOf(1),
-      getTimes(agency, { stop, route, direction })
+          .should.eventually.be.a('array').and
+          .should.eventually.have.lengthOf(1),
+      getTimes(agency, { stop, routeNum, direction })
           .should.eventually.have.deep.property('0.route', '94'),
-      getTimes(agency, { stop, route, direction })
+      getTimes(agency, { stop, routeNum, direction })
           .should.eventually.have.deep.property('0.label',
-            'East - 94 Wellesley towards Castle Frank Station'),
-      getTimes(agency, { stop, route, direction })
+            'east - 94 wellesley towards castle frank station'),
+      getTimes(agency, { stop, routeNum, direction })
           .should.eventually.have.deep.property('0.times')
             .that.is.a('array'),
     ]);
   });
 
   it('fails to get times for 95 at #15298 (Ossington Station)', function() {
-    return getTimes(agency, { stop })
-            .should.be.rejectedWith(ReferenceError).and
-            .should.be.rejectedWith("51234121 is not a ttc stop.")
+    stop = '15298';
+    routeNum = '95';
+    return getTimes(agency, { stop, routeNum })
+            .should.be.rejectedWith("route 95 does not go to stop 15298.")
+          ;
+  });
+
+  it('fails to get times for 94W at #15298 (Ossington Station)', function() {
+    stop = '15298';
+    routeNum = '94';
+    direction = 'west';
+    return getTimes(agency, { stop, routeNum, direction })
+            .should.be.rejectedWith("route 94 west does not go to stop 15298.")
           ;
   });
 
   it('fails to get times for stop #51235121', function() {
+    stop = '51235121';
     return getTimes(agency, { stop })
-            .should.be.rejectedWith(ReferenceError).and
-            .should.be.rejectedWith("51234121 is not a ttc stop.")
+            .should.be.rejectedWith("51235121 is not a ttc stop.")
           ;
   });
 
+  /*
   it('gets times for Harbord and Bathurst for 94', function() {
     throw AssertionError;
     /* links:
@@ -117,7 +105,7 @@ describe('TTC service', () => {
      *     'times': [384, 869, 1429, 2122, 2629],
      *   }, 
      * ]
-     */
+     *
   });
 
   it('gets times for Harbord and Bathurst for all', function() {
@@ -160,7 +148,8 @@ describe('TTC service', () => {
      *     'times': [],
      *   }, 
      * ]
-     */
+     *
   });
+  */
 
 });

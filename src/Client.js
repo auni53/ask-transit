@@ -1,4 +1,8 @@
 import './services/nextbus';
+import index from './services/index';
+
+import includes from 'lodash/includes';
+import flatten from 'lodash/flatten';
 
 export default class Client {
   
@@ -7,33 +11,82 @@ export default class Client {
   }
   
   load(agency) {
-    const service = getService(agency);
+    const service = this.findServices(agency);
     this._agency = agency;
     this._service = require(`./services/${service}`);
+    let data = {};
+    let count = 0;
+    let routes = this._service.getRoutes(agency);
+
+   /* 
+      .then(routes => Promise.all(
+          routes.map(r =>
+            this._service.getStops(agency, r)
+              .then(info => {console.log(count++); return Promise.resolve(data[r] = info);})
+          )
+        )
+      );
+    /*
+    return this._service.getRoutes(agency)
+      .then(routes => Promise.all(
+          routes.map(r =>
+            this._service.getStops(agency, r)
+              .then(info => {console.log(count++); return Promise.resolve(data[r] = info);})
+          )
+        )
+      );
+     */
   }
 
-  getService(agency) {
-    const index = {
-      'nextbus': ['ttc'],
-    };
-
+  /**
+   * Resolve the provided agency query into
+   * a list of matching services.
+   * (Uses data from sample/index.json)
+   *
+   * @param  {string}   agency
+   * @return {[string]} services
+   */
+  findServices(agency) {
+    return Object.keys(index).filter(service => 
+                includes(index[service], agency));
   }
 
-  getRoutes() {
-    return this._service.getRoutes(this._agency);
+  /**
+   * Resolve the provided stop query into a 
+   * list of valid stops.
+   *
+   * @param  {string}   query 
+   * @return {[number]} stops
+   */
+  findStops(token) {
+    return Promise.resolve(token);
+  }
+  
+  /**
+   * Resolve the list of stops into a
+   * list of valid predictions.
+   *
+   */
+  findTimes(stops, route, direction) {
+    // return Promise.all(stops.map(stop =>
+      debugger;
+      return this._service
+        .getTimes(this.agency, 
+          {
+            stop: stops[0],
+            routeNum: route,
+            direction,
+          })
+        ;
+      /*
+        .catch(e => console.log('--ERROR--', [e]))
+    ));
+   */
   }
 
-  getStops(...args) {
-    return this._service.getStops(this._agency, ...args);
-  }
-
-  getTimes(...args) {
-    return this._service.getTimes(this._agency, ...args);
-  }
-
-  /*
-    getServices() do some sick map filtering shit here
-  */
+  /**
+   *
+   */
 
   // Getters
   get agency() { return this._agency; }

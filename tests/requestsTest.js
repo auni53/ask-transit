@@ -1,6 +1,6 @@
 import { get } from '../src/helpers/requests.js';
 
-describe('get request helper', function() {
+describe('function get() from requests', function() {
 
   const url = {
     valid:   'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=ttc',
