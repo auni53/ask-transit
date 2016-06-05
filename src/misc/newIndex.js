@@ -21,12 +21,9 @@
 /**
  * App ID for the skill
  */
-var APP_ID; //replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
+let APP_ID; //replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
 
-/**
- * The AlexaSkill prototype and helper functions
- */
-var AlexaSkill = require('./AlexaSkill');
+import AlexaSkill from './AlexaSkill';
 
 /**
  * SpaceGeek is a child of AlexaSkill.
@@ -34,7 +31,7 @@ var AlexaSkill = require('./AlexaSkill');
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript#Inheritance
  */
-var SpaceGeek = function () {
+const SpaceGeek = function () {
   AlexaSkill.call(this, APP_ID);
 };
 
@@ -42,42 +39,40 @@ var SpaceGeek = function () {
 SpaceGeek.prototype = Object.create(AlexaSkill.prototype);
 SpaceGeek.prototype.constructor = SpaceGeek;
 
-SpaceGeek.prototype.eventHandlers.onSessionStarted = function (sessionStartedRequest, session) {
-  console.log("SpaceGeek onSessionStarted requestId: " + sessionStartedRequest.requestId
-    + ", sessionId: " + session.sessionId);
+SpaceGeek.prototype.eventHandlers.onSessionStarted = (sessionStartedRequest, session) => {
+  console.log(`SpaceGeek onSessionStarted requestId: ${sessionStartedRequest.requestId}, sessionId: ${session.sessionId}`);
   // any initialization logic goes here
 };
 
-SpaceGeek.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-  console.log("SpaceGeek onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
+SpaceGeek.prototype.eventHandlers.onLaunch = (launchRequest, session, response) => {
+  console.log(`SpaceGeek onLaunch requestId: ${launchRequest.requestId}, sessionId: ${session.sessionId}`);
   handleNewFactRequest(response);
 };
 
 /**
  * Overridden to show that a subclass can override this function to teardown session state.
  */
-SpaceGeek.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequest, session) {
-  console.log("SpaceGeek onSessionEnded requestId: " + sessionEndedRequest.requestId
-    + ", sessionId: " + session.sessionId);
+SpaceGeek.prototype.eventHandlers.onSessionEnded = (sessionEndedRequest, session) => {
+  console.log(`SpaceGeek onSessionEnded requestId: ${sessionEndedRequest.requestId}, sessionId: ${session.sessionId}`);
   // any cleanup logic goes here
 };
 
 SpaceGeek.prototype.intentHandlers = {
-  "GetNewFactIntent": function (intent, session, response) {
+  "GetNewFactIntent"(intent, session, response) {
     handleNewFactRequest(response);
   },
 
-  "AMAZON.HelpIntent": function (intent, session, response) {
+  "AMAZON.HelpIntent"(intent, session, response) {
     response.ask("You can ask Space Geek tell me a space fact, or, you can say exit... What can I help you with?", "What can I help you with?");
   },
 
-  "AMAZON.StopIntent": function (intent, session, response) {
-    var speechOutput = "Goodbye";
+  "AMAZON.StopIntent"(intent, session, response) {
+    const speechOutput = "Goodbye";
     response.tell(speechOutput);
   },
 
-  "AMAZON.CancelIntent": function (intent, session, response) {
-    var speechOutput = "Goodbye";
+  "AMAZON.CancelIntent"(intent, session, response) {
+    const speechOutput = "Goodbye";
     response.tell(speechOutput);
   }
 };
@@ -87,27 +82,27 @@ SpaceGeek.prototype.intentHandlers = {
  */
 function handleNewFactRequest(response) {
   // Get a random space fact from the space facts list
-  var info = LEADERSHIP_PRINCIPLES;
-  var i = Math.floor(Math.random() * Object.keys(info).length);
-  var count = 0;
+  const info = LEADERSHIP_PRINCIPLES;
+  const i = Math.floor(Math.random() * Object.keys(info).length);
+  let count = 0;
 
-  var principle = null;
-  for (var item in info) {
+  let principle = null;
+  for (const item in info) {
     if (count === i) principle = item;
     count++;
   }
 
-  var fact = info[principle];
+  const fact = info[principle];
 
   // Create speech output
-  var speechOutput = principle + " is about how " + fact;
+  const speechOutput = `${principle} is about how ${fact}`;
 
   response.tellWithCard(speechOutput, "SpaceGeek", speechOutput);
 }
 
-// Create the handler that responds to the Alexa Request.
-exports.handler = function (event, context) {
+export function handler(event, context) {
   // Create an instance of the SpaceGeek skill.
-  var transitClient = new SpaceGeek();
+  const transitClient = new SpaceGeek();
   transitClient.execute(event, context);
 };
+

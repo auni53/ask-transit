@@ -1,4 +1,4 @@
 {
   "presets": ["es2016"],
-  "plugins": ["syntax-flow", "transform-flow-strip-types"]
+  "plugins": ["babel-plugin-transform-decorators-legacy"]
 }

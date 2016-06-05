@@ -1,0 +1,28 @@
+{
+  "intents": [
+    {
+      "intent": "GetTimesIntent",
+      "slots": [
+        {
+          "name": "agency",
+          "type": "AGENCIES"
+        },
+        {
+          "name": "stop",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "route",
+          "type": "AMAZON.FOUR_DIGIT_NUMBER"
+        },
+        {
+          "name": "direction",
+          "type": "DIRECTIONS"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}

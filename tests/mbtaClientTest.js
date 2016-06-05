@@ -36,7 +36,7 @@ describe('class Client mbta', function() {
 
     it('gets times for stop #00093', function() {
       stop = '00093';
-      return mbtaClient.findTimes([stop]).should.eventually
+      return mbtaClient.findTimes(stop).should.eventually
               .be.a('array').and
               .have.lengthOf(2).and
               .all.have.keys('route', 'label', 'times').and
@@ -52,7 +52,7 @@ describe('class Client mbta', function() {
     it('gets times for the 1 from #00093', function() {
       stop = '00093';
       route = '1';
-      return mbtaClient.findTimes([stop], route).should.eventually
+      return mbtaClient.findTimes(stop, route).should.eventually
               .be.a('array').and
               .have.lengthOf(1).and
               .all.have.keys('route', 'label', 'times').and
@@ -66,7 +66,7 @@ describe('class Client mbta', function() {
       stop = '00093';
       route = undefined;
       direction = 'harvard';
-      return mbtaClient.findTimes([stop], route, direction).should.eventually
+      return mbtaClient.findTimes(stop, route, direction).should.eventually
               .be.a('array').and
               .have.lengthOf(1).and
               .all.have.keys('route', 'label', 'times')
@@ -79,7 +79,7 @@ describe('class Client mbta', function() {
       stop = '00093';
       route = undefined;
       direction = 'dudley';
-      return mbtaClient.findTimes([stop], route, direction)
+      return mbtaClient.findTimes(stop, route, direction)
               .should.be.rejectedWith('route dudley does not go to stop 00093.')
         ;
     }); 
@@ -87,7 +87,7 @@ describe('class Client mbta', function() {
     it('fails to get predictions for the 701', function() {
       stop = '00093';
       route = '701';
-      return mbtaClient.findTimes([stop], route).should.eventually
+      return mbtaClient.findTimes(stop, route).should.eventually
               .be.a('array').and
               .have.lengthOf(1).and
               .all.have.keys('route', 'label', 'times')
@@ -101,7 +101,7 @@ describe('class Client mbta', function() {
       stop = '00093';
       route = undefined;
       direction = 'central';
-      return mbtaClient.findTimes([stop], route, direction).should.eventually
+      return mbtaClient.findTimes(stop, route, direction).should.eventually
               .be.a('array').and
               .have.lengthOf(1).and
               .all.have.keys('route', 'label', 'times')

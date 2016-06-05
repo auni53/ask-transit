@@ -1,4 +1,3 @@
-import './services/nextbus';
 import index from './services/index';
 
 import includes from 'lodash/includes';
@@ -17,25 +16,6 @@ export default class Client {
     let data = {};
     let count = 0;
     let routes = this._service.getRoutes(agency);
-
-   /* 
-      .then(routes => Promise.all(
-          routes.map(r =>
-            this._service.getStops(agency, r)
-              .then(info => {console.log(count++); return Promise.resolve(data[r] = info);})
-          )
-        )
-      );
-    /*
-    return this._service.getRoutes(agency)
-      .then(routes => Promise.all(
-          routes.map(r =>
-            this._service.getStops(agency, r)
-              .then(info => {console.log(count++); return Promise.resolve(data[r] = info);})
-          )
-        )
-      );
-     */
   }
 
   /**
@@ -59,7 +39,7 @@ export default class Client {
    * @return {[number]} stops
    */
   findStops(token) {
-    return Promise.resolve(token);
+    return Promise.resolve([token]);
   }
   
   /**
@@ -67,18 +47,19 @@ export default class Client {
    * list of valid predictions.
    *
    */
-  findTimes(stops, route, direction) {
-    // return Promise.all(stops.map(stop =>
-      debugger;
-      return this._service
-        .getTimes(this.agency, 
-          {
-            stop: stops[0],
-            routeNum: route,
-            direction,
-          })
-        ;
+  findTimes(stopToken, route, direction) {
+      return this.findStops(stopToken)
+        .then(stops => 
+            this._service.getTimes(this.agency, 
+                {
+                  stop: stops[0],
+                  routeNum: route,
+                  direction,
+                })
+        );
+
       /*
+     return Promise.all(stops.map(stop =>
         .catch(e => console.log('--ERROR--', [e]))
     ));
    */
