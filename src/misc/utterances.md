@@ -1,9 +1,9 @@
-GetTimes when is the next {route} {direction} at {stop} for {agency}
-GetTimes when is the next {direction} bound {route} at {stop} for {agency}
-GetTimes when is the next {direction} bound {route} coming to {stop} for {agency}
-GetTimes how long until the next {route} {direction} comes to {stop} for {agency}
-GetTimes what are times at {stop} for {agency}
-GetTimes is {route} coming to {stop} for {agency}
-GetTimes {agency} {stop}
-GetTimes {stop} {agency}
-GetTimes times for {stop} for {agency}
+GetTimes for {agency} times to {stop}
+GetTimes for {agency} times at {stop}
+GetTimes for {stop} {agency}
+GetTimes when the {route} {direction} is coming to {stop} for {agency}
+GetTimes when the {direction} {route} is coming to {stop} for {agency}
+GetTimes when the next {route} {direction} is coming to {stop} for {agency}
+GetTimes when the next {direction} {route} is coming to {stop} for {agency}
+GetTimes for the {route} {direction} to {stop} for {agency}
+GetTimes for the {direction} {route} to {stop} for {agency}

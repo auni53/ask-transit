@@ -13,7 +13,7 @@
         },
         {
           "name": "route",
-          "type": "AMAZON.FOUR_DIGIT_NUMBER"
+          "type": "AMAZON.NUMBER"
         },
         {
           "name": "direction",

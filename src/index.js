@@ -1,2 +1,2 @@
-import Skill from './Skill';
-module.exports = Skill;
+import Transit from './Transit';
+module.exports = Transit;
