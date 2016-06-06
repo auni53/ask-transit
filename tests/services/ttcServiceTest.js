@@ -1,10 +1,10 @@
-import { getRoutes, getStops, getTimes } from '../src/services/nextbus.js';
-import sample from './sample/ttc.json';
+import { getRoutes, getStops, getTimes } from 'services/nextbus.js';
+import sample from '../sample/ttc';
 
 describe('TTC – nextbus service', () => {
   const agency = 'ttc';
   let route = '94';
-  let direction = 'E'; 
+  let direction = 'E';
   let stop, response, routeNum;
 
   it('gets a list of routes', function() {
@@ -24,7 +24,7 @@ describe('TTC – nextbus service', () => {
 
   it('fails to get stops for route 1000', function() {
     return getStops(agency, '1000')
-            .should.rejectedWith("1000 is not a ttc route.")
+            .should.rejectedWith('1000 is not a ttc route.')
           ;
   });
 
@@ -55,7 +55,7 @@ describe('TTC – nextbus service', () => {
           .should.eventually.have.deep.property('0.route', '94'),
       getTimes(agency, { stop, routeNum, direction })
           .should.eventually.have.deep.property('0.label',
-            'east - 94 wellesley towards castle frank station'),
+            'east wellesley towards castle frank station'),
       getTimes(agency, { stop, routeNum, direction })
           .should.eventually.have.deep.property('0.times')
             .that.is.a('array'),
@@ -66,7 +66,7 @@ describe('TTC – nextbus service', () => {
     stop = '15298';
     routeNum = '95';
     return getTimes(agency, { stop, routeNum })
-            .should.be.rejectedWith("route 95 does not go to stop 15298.")
+            .should.be.rejectedWith('route 95 does not go to stop 15298.')
           ;
   });
 
@@ -75,14 +75,14 @@ describe('TTC – nextbus service', () => {
     routeNum = '94';
     direction = 'west';
     return getTimes(agency, { stop, routeNum, direction })
-            .should.be.rejectedWith("route 94 west does not go to stop 15298.")
+            .should.be.rejectedWith('route 94 west does not go to stop 15298.')
           ;
   });
 
   it('fails to get times for stop #51235121', function() {
     stop = '51235121';
     return getTimes(agency, { stop })
-            .should.be.rejectedWith("51235121 is not a ttc stop.")
+            .should.be.rejectedWith('51235121 is not a ttc stop.')
           ;
   });
 
@@ -147,8 +147,7 @@ describe('TTC – nextbus service', () => {
      *     'label': 'North - 310 Bathurst Blue Night towards Steele',
      *     'times': [],
      *   }, 
-     * ]
-     *
+     * ] *
   });
   */
 

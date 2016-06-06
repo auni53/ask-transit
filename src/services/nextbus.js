@@ -1,5 +1,5 @@
-import { get } from '../helpers/requests.js';
-import parse from '../helpers/xmlparse';
+import { get } from 'lib/requests.js';
+import parse from 'lib/xmlparse';
 import intersection from 'lodash/intersection';
 
 const getValue = e => e.value;
@@ -30,35 +30,35 @@ export function getRoutes(agency) {
  */ 
 export function getStops(agency, route) {
   const url = `http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=${agency}&r=${route}`;
-  const stopQuery = `body/route/stop/@stopId`;
-  const dirQuery = `body/route/direction/@name`;
+  const stopQuery = 'body/route/stop/@stopId';
+  const dirQuery = 'body/route/direction/@name';
   return get(url).then(doc => {
       // Parse stop information for route
-      const stops = {}, directions = {};
-      const stopList = parse(doc, stopQuery).map(getValue);
-      stopList.forEach(stop => {
-        const labelQuery = `body/route/stop[@stopId="${stop}"]/@title`;
-        stops[stop] = parse(doc, labelQuery)[0].value.toLowerCase();
-      });
-
-      // Parse direction information for routes
-      const dirList = parse(doc, dirQuery).map(getValue);
-      dirList.forEach(dir => {
-        const tagQuery = `body/route/direction[@name="${dir}"]/stop/@tag`;
-        const tags = parse(doc, tagQuery).map(getValue);
-        dir = dir.toLowerCase();
-        directions[dir] = tags.map(t => {
-          t = t.replace(/\D/g, ''); // Remove non-numbers from tag
-          let stopId = parse(doc, `body/route/stop[@tag="${t}"]/@stopId`)[0];
-          return stopId.value;
-        });
-      }); 
-      
-      if ([...Object.keys(stops), ...Object.keys(directions)].length === 0) {
-        return Promise.reject(Error(`${route} is not a ${agency} route.`));
-      }
-      return { stops, directions };
+    const stops = {}, directions = {};
+    const stopList = parse(doc, stopQuery).map(getValue);
+    stopList.forEach(stop => {
+      const labelQuery = `body/route/stop[@stopId="${stop}"]/@title`;
+      stops[stop] = parse(doc, labelQuery)[0].value.toLowerCase();
     });
+
+    // Parse direction information for routes
+    const dirList = parse(doc, dirQuery).map(getValue);
+    dirList.forEach(dir => {
+      const tagQuery = `body/route/direction[@name="${dir}"]/stop/@tag`;
+      const tags = parse(doc, tagQuery).map(getValue);
+      dir = dir.toLowerCase();
+      directions[dir] = tags.map(t => {
+        t = t.replace(/\D/g, ''); // Remove non-numbers from tag
+        let stopId = parse(doc, `body/route/stop[@tag="${t}"]/@stopId`)[0];
+        return stopId.value;
+      });
+    }); 
+    
+    if ([...Object.keys(stops), ...Object.keys(directions)].length === 0) {
+      return Promise.reject(Error(`${route} is not a ${agency} route.`));
+    }
+    return { stops, directions };
+  });
 }
 
 /** 
@@ -77,7 +77,7 @@ export function getTimes(agency, { stop, routeNum, direction }) {
   let times = [];
 
   return get(url).then(doc => {
-    const routeList = parse(doc, `/body/predictions/@routeTag`).map(getValue);
+    const routeList = parse(doc, '/body/predictions/@routeTag').map(getValue);
   
     if (routeList.length === 0) {
       return Promise.reject(Error(`${stop} is not a ${agency} stop.`));
@@ -97,6 +97,10 @@ export function getTimes(agency, { stop, routeNum, direction }) {
           label = parse(doc, inactiveQuery)[0].value.toLowerCase();
           times = null;
         }
+        label = (label.split(' ')
+                  .filter(token => token != route && token != '-')
+                    .join(' '));
+        
       } catch (e) {
         console.log('--ERROR--');
         console.log(e);

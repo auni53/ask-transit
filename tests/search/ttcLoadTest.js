@@ -1,5 +1,5 @@
-import Client from '../src/Client.js';
-import sample from './sample/ttc.json';
+import Client from 'services/Client';
+import sample from '../sample/ttc';
 
 describe('class Client', () => {
 
@@ -36,5 +36,5 @@ describe('class Client', () => {
       ;
     });
   });
- 
+
 });

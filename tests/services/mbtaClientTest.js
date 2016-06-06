@@ -1,4 +1,4 @@
-import Client from '../src/Client.js';
+import Client from 'services/Client';
 
 const hasValidTimes = predictions =>
   predictions.filter(({ route, label, times }) =>

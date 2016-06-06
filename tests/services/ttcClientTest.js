@@ -1,15 +1,7 @@
-import Client from '../src/Client.js';
-import sample from './sample/ttc.json';
+import Client from 'services/Client';
+import sample from '../sample/ttc';
 
-const hasValidTimes = predictions =>
-  predictions.filter(({ route, label, times }) =>
-    Array.isArray(times)
-  ).length > 0;
-
-const hasOnlyValidTimes = predictions =>
-  predictions.filter(({ route, label, times }) =>
-    Array.isArray(times)
-  ).length === predictions.length;
+import { hasValidTimes, hasOnlyValidTimes } from 'lib/helpers';
 
 describe('class Client for TTC', function() {
 
@@ -22,8 +14,8 @@ describe('class Client for TTC', function() {
   describe('gets predictions for Ossington Station', function() {
     before(function() {
       labels = {
-        '161': 'west - 161 rogers rd towards jane',
-        '94': 'east - 94 wellesley towards castle frank station',
+        '161': 'west rogers rd towards jane',
+        '94': 'east wellesley towards castle frank station',
       };
     });
 
@@ -47,7 +39,7 @@ describe('class Client for TTC', function() {
               .include.something.that.has.property('route', '94').and
               .include.something.that.has.property('label', labels['94'])
         ;
-    }); 
+    });
 
     it('gets times for the 94 at stop #15298', function() {
       stop = '15298';
@@ -61,7 +53,7 @@ describe('class Client for TTC', function() {
               .include.something.that.has.property('route', '94').and
               .include.something.that.has.property('label', labels['94'])
         ;
-    }); 
+    });
 
     it('gets times for the 94 east from stop #15298', function() {
       stop = '15298';
@@ -76,7 +68,7 @@ describe('class Client for TTC', function() {
               .include.something.that.has.property('route', '94').and
               .include.something.that.has.property('label', labels['94'])
         ;
-    }); 
+    });
 
     it('gets times west from stop #15298', function() {
       stop = '15298';
@@ -91,40 +83,40 @@ describe('class Client for TTC', function() {
               .not.include.something.that.has.property('route', '94').and
               .not.include.something.that.has.property('label', labels['94'])
         ;
-    }); 
+    });
 
     it('fails to get times for 95 from stop #15298', function() {
       stop = '15298';
       route = '95';
       return ttcClient.findTimes(stop, route)
-          .should.be.rejectedWith("route 95 does not go to stop 15298.")
+          .should.be.rejectedWith('route 95 does not go to stop 15298.')
         ;
-    }); 
+    });
 
     it('fails to get times south from stop #15298', function() {
       stop = '15298';
       route = undefined;
       direction = 'south';
       return ttcClient.findTimes(stop, route, direction)
-          .should.be.rejectedWith("route south does not go to stop 15298.")
+          .should.be.rejectedWith('route south does not go to stop 15298.')
         ;
-    }); 
+    });
 
     it('fails to get times for 95 west from stop #15298', function() {
       stop = '15298';
       route = '95';
       direction = 'west';
       return ttcClient.findTimes(stop, route, direction)
-          .should.be.rejectedWith("route 95 west does not go to stop 15298.")
+          .should.be.rejectedWith('route 95 west does not go to stop 15298.')
         ;
-    }); 
+    });
   });
 
   describe('gets predictions for Harbord and Bathurst NW corner', function() {
     before(function() {
       labels = {
-        '511': 'south - 511 bathurst towards fleet loop',
-        '310': 'south - 310 bathurst blue night towards exhibition',
+        '511': 'south bathurst towards fleet loop',
+        '310': 'south bathurst blue night towards exhibition',
       };
     });
 
@@ -150,7 +142,7 @@ describe('class Client for TTC', function() {
               .satisfy(hasValidTimes).and
               .not.satisfy(hasOnlyValidTimes).and
         ;
-    }); 
+    });
 
     it('gets times for the 511 from stop #0149', function() {
       stop = '0149';
@@ -163,7 +155,7 @@ describe('class Client for TTC', function() {
               .include.something.that.has.property('label', labels['511']).and
               .satisfy(hasOnlyValidTimes).and
         ;
-    }); 
+    });
 
     it('gets times for the 310 from stop #0149', function() {
       stop = '0149';
@@ -176,7 +168,7 @@ describe('class Client for TTC', function() {
               .include.something.that.has.property('label', labels['310']).and
               .not.satisfy(hasValidTimes).and
         ;
-    }); 
+    });
 
   });
 });
