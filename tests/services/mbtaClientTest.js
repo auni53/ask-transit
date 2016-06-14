@@ -14,8 +14,8 @@ describe('class Client mbta', function() {
 
   let mbtaClient, stop, route, direction, labels;
   before(function() {
-    mbtaClient = new Client();
-    mbtaClient.load('mbta');
+    mbtaClient = new Client('mbta');
+    mbtaClient.load();
   });
 
   describe('gets predictions for Massachusetts and Newbury', function() {
@@ -47,7 +47,7 @@ describe('class Client mbta', function() {
               .satisfy(hasValidTimes).and
               .not.satisfy(hasOnlyValidTimes).and
         ;
-    }); 
+    });
 
     it('gets times for the 1 from #00093', function() {
       stop = '00093';
@@ -60,7 +60,7 @@ describe('class Client mbta', function() {
               .include.something.that.has.property('label', labels['1']).and
               .satisfy(hasValidTimes).and
         ;
-    }); 
+    });
 
     it('gets times to harvard stop #00093', function() {
       stop = '00093';
@@ -73,7 +73,7 @@ describe('class Client mbta', function() {
               .include.something.that.has.property('route', '1').and
               .include.something.that.has.property('label', labels['1']).and
         ;
-    }); 
+    });
 
     it('fails to get times to dudley stop #00093', function() {
       stop = '00093';
@@ -82,7 +82,7 @@ describe('class Client mbta', function() {
       return mbtaClient.findTimes(stop, route, direction)
               .should.be.rejectedWith('route dudley does not go to stop 00093.')
         ;
-    }); 
+    });
 
     it('fails to get predictions for the 701', function() {
       stop = '00093';

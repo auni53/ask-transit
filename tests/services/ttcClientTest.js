@@ -7,8 +7,8 @@ describe('class Client for TTC', function() {
 
   let ttcClient, stop, route, direction, labels;
   before(function() {
-    ttcClient = new Client();
-    ttcClient.load('ttc');
+    ttcClient = new Client('ttc');
+    ttcClient.load();
   });
 
   describe('gets predictions for Ossington Station', function() {

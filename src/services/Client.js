@@ -1,20 +1,17 @@
 import index from 'services/index';
+import { promisifyAll } from 'bluebird';
 import includes from 'lodash/includes';
 import flatten from 'lodash/flatten';
 
 export default class Client {
 
-  constructor() {
-    this._service = null;
+  constructor(agency) {
+    this._agency = agency;
+    const service = this.findServices(this._agency);
+    this._service = promisifyAll(require(`services/${service}`));
   }
 
-  load(agency) {
-    const service = this.findServices(agency);
-    this._agency = agency;
-    this._service = require(`services/${service}`);
-    let data = {};
-    let count = 0;
-    let routes = this._service.getRoutes(agency);
+  load() {
   }
 
   /**
@@ -28,6 +25,37 @@ export default class Client {
   findServices(agency) {
     return Object.keys(index).filter(service =>
                 includes(index[service], agency));
+  }
+
+  save(n) {
+    const cleanData = routes => {
+      let data = {
+        routes: {},
+        stops: Object.assign({},
+                ...routes.map(({ stops }) => stops)),
+      };
+      routes.forEach(({ route, directions }) => data.routes[route] = directions);
+      return data;
+    };
+
+    return this.findRoutes().then(routes =>
+      Promise.all(routes.slice(0, (n !== undefined ? n : routes.length))
+        .map(route => { console.time(route); return this.findRouteConfig(route); })
+      ).then(cleanData)
+    );
+  }
+
+  /**
+   * Get list of routes.
+   *
+   * @return {[string]} array of routes
+   */
+  findRoutes() {
+    return this._service.getRoutes(this._agency);
+  }
+
+  findRouteConfig(route) {
+    return this._service.getStops(this._agency, route);
   }
 
   /**

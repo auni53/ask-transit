@@ -6,7 +6,8 @@ describe('class Client', () => {
   describe('constructs and loads service information', () => {
     let ttcClient;
     before(function() {
-      ttcClient = new Client();
+      ttcClient = new Client('ttc');
+      ttcClient.load();
     });
 
     it('constructs a new client', function() {
@@ -18,23 +19,23 @@ describe('class Client', () => {
         .should.include('nextbus');
     });
 
-    before(function (done) {
-      ttcClient.load('ttc')
-        .then(done);
-    });
-
     it('loads the correct list of routes', function() {
-      ttcClient.getRoutes()
-        .should.include.members(sample.routes).and
-        .should.have.lengthOf(sample.routes.length)
+      return ttcClient.findRoutes().should.eventually
+        .include.members(sample.routes).and
+        .have.lengthOf(sample.routes.length)
       ;
     });
 
     it('loads correct stop data for 94', function() {
-      return ttcClient.getStops('94')
-        .should.deep.equal(sample['94'])
+      return ttcClient.findRouteConfig('94').should.eventually
+        .deep.equal(sample['94'])
       ;
     });
+
+    it('caches data', function() {
+      return ttcClient.save().should.eventually.satisfy(global.print);
+    });
+
   });
 
 });

@@ -18,7 +18,7 @@ describe('TTC – nextbus service', () => {
   it('gets stops for route 94', function() {
     return getStops(agency, route)
             .should.be.fulfilled.and
-           .should.eventually.deep.equal(sample['94'])
+            .should.eventually.deep.equal(sample['94'])
           ;
   });
 
@@ -29,7 +29,7 @@ describe('TTC – nextbus service', () => {
   });
 
   it('gets times at #15298 (Ossington Station)', function() {
-    route = '94';      
+    route = '94';
     stop = '15298';
     return getTimes(agency, { stop })
             .should.be.fulfilled.and
@@ -39,7 +39,6 @@ describe('TTC – nextbus service', () => {
               .that.is.a('object').and
               .that.contains.keys('route', 'label', 'times')
           ;
-            
   });
 
   it('gets times for 94E at #15298 (Ossington Station)', function() {
@@ -98,12 +97,12 @@ describe('TTC – nextbus service', () => {
      *     'route': '94',
      *     'label': 'East - 94 Wellesley towards Castle Frank Station',
      *     'times': [179, 642, 1056, 1567, 2167],
-     *   }, 
+     *   },
      *   {
      *     'route': '94',
      *     'label': 'West - 94a Wellesley towards Ossington Station',
      *     'times': [384, 869, 1429, 2122, 2629],
-     *   }, 
+     *   },
      * ]
      *
   });
@@ -121,32 +120,32 @@ describe('TTC – nextbus service', () => {
      *     'route': '94',
      *     'label': 'East - 94 Wellesley towards Castle Frank Station',
      *     'times': [179, 642, 1056, 1567, 2167],
-     *   }, 
+     *   },
      *   {
      *     'route': '94',
      *     'label': 'West - 94a Wellesley towards Ossington Station',
      *     'times': [384, 869, 1429, 2122, 2629],
-     *   }, 
+     *   },
      *   {
-     *     'route': '511', 
+     *     'route': '511',
      *     'label': 'North - 511 Bathurst towards Bathurst Station',
      *     'times':  [27, 250, 714, 1380, 1740],
-     *   }, 
+     *   },
      *   {
      *     'route': '511',
      *     'label': 'South - 511 Bathurst towards Fleet Loop',
      *     'times': [903, 1018, 1263, 1983, 2343],
-     *   }, 
+     *   },
      *   {
      *     'route': '310',
      *     'label': 'South - 310 Bathurst Blue Night towards Exhibition',
      *     'times': [],
-     *   }, 
+     *   },
      *   {
      *     'route': '310',
      *     'label': 'North - 310 Bathurst Blue Night towards Steele',
      *     'times': [],
-     *   }, 
+     *   },
      * ] *
   });
   */
