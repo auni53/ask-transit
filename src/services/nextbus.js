@@ -54,7 +54,7 @@ export function getStops(agency, route) {
           try {
             return stopId.value;
           } catch (e) {
-            console.log(`No stop ID found for tag ${t}.`);
+            // console.log(`No stop ID found for tag ${t} and route ${route}.`);
             return;
           }
         });
@@ -63,10 +63,6 @@ export function getStops(agency, route) {
       if ([...Object.keys(stops), ...Object.keys(directions)].length === 0) {
         return Promise.reject(Error(`${route} is not a ${agency} route.`));
       }
-
-      try {
-        console.timeEnd(route);
-      } catch (e) { console.log(); }
 
       return { route, stops, directions };
     } catch (e) {

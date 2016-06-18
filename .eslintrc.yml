@@ -30,3 +30,4 @@ rules:
         - always-multiline
     no-trailing-spaces:
         - error
+    no-debugger: 0

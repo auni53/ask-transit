@@ -15,7 +15,6 @@ describe('class Client mbta', function() {
   let mbtaClient, stop, route, direction, labels;
   before(function() {
     mbtaClient = new Client('mbta');
-    mbtaClient.load();
   });
 
   describe('gets predictions for Massachusetts and Newbury', function() {

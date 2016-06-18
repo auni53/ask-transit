@@ -15,7 +15,8 @@ global.print = v => {
   return true;
 };
 
-// require('./hello');
-// require('./requestsTest');
-// require('./ttcTest');
-// require('./ClientTest');
+/*
+require('./interpret/*');
+require('./resolution/*');
+require('./services/*');
+*/
