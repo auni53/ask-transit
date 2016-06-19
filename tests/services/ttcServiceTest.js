@@ -8,10 +8,8 @@ describe('TTC – nextbus service', () => {
   let stop, response, routeNum;
 
   it('gets a list of routes', function() {
-    return getRoutes(agency)
-            .should.be.fulfilled.and
-            .should.eventually.include.members(sample.routes).and
-            .should.eventually.have.lengthOf(sample.routes.length)
+    return getRoutes(agency).should.eventually
+            .eql(sample.routes)
           ;
   });
 

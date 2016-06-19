@@ -11,12 +11,12 @@ global.AssertionError = chai.AssertionError;
 global.Assertion = chai.Assertion;
 global.assert = chai.assert;
 global.print = v => {
-  console.log(JSON.stringify(v));
+  console.log(JSON.stringify(v, null, 2));
   return true;
 };
 
 /*
-require('./interpret/*');
-require('./resolution/*');
-require('./services/*');
+  require('./interpret');
+  require('./resolution');
+  require('./services');
 */

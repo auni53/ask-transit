@@ -13,13 +13,16 @@ export function predictions(predictionsData) {
   const data = predictionsData.filter(p => (p.times !== null));
   const print = s => { console.log(s); return true; };
   const validTimes = flatten(data.map(datum => slice(datum.times, 0, 3)));
-  const nTimes = validTimes.filter(t => (t < 20)).length;
+  const nTimes = validTimes.filter(t => (t < (30 * 60))).length;
   let cap;
+  console.log(validTimes);
+  console.log(nTimes);
   if (nTimes > 8) {
     cap = 5;
   } else if (nTimes > 4) {
     cap = 5;
   } else cap = 7.5;
+  console.log(cap);
 
   return sortBy(data, datum => datum.times[0]).map(
       ({ route, label, times }) =>

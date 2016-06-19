@@ -38,8 +38,7 @@
     "dev": "webpack -d --watch",
     "build": "webpack; cd dist; zip -r index.js.zip index.js",
     "deploy": "webpack -p; cd dist; zip -r index.js.zip index.js",
-    "test": "mocha --compilers js:babel-core/register --recursive tests",
-    "single-test": "mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register --recursive --no-timeouts -r tests/index.js tests"
   },
   "repository": {
     "type": "git",

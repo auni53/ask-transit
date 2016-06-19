@@ -4,7 +4,7 @@ import interpret from 'lib/interpreter';
 
 describe('Speech Generator', function() {
 
-  describe('interprets correct predictions', function() {
+  describe.skip('interprets correct predictions', function() {
     const {
       single_one,
       single_two,

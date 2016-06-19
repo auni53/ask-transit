@@ -1,7 +1,7 @@
 {
   "intents": [
     {
-      "intent": "GetTimesIntent",
+      "intent": "GetTimesNumber",
       "slots": [
         {
           "name": "agency",
@@ -22,7 +22,55 @@
       ]
     },
     {
+      "intent": "GetTimesLabel",
+      "slots": [
+        {
+          "name": "agency",
+          "type": "AGENCIES"
+        },
+        {
+          "name": "route",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "direction",
+          "type": "DIRECTIONS"
+        },
+        { 
+          "name": "label",
+          "type": "STOPLABEL"
+        }
+      ]
+    },
+    {
+      "intent": "GetTimesIntersection",
+      "slots": [
+        {
+          "name": "agency",
+          "type": "AGENCIES"
+        },
+        {
+          "name": "route",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "direction",
+          "type": "DIRECTIONS"
+        },
+        { 
+          "name": "streetA",
+          "type": "STREETNAME"
+        },
+        { 
+          "name": "streetB",
+          "type": "STREETNAME"
+        }
+      ]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]
 }
+
+

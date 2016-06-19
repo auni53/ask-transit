@@ -4,14 +4,10 @@ import includes from 'lodash/includes';
 import flatten from 'lodash/flatten';
 
 export default class Client {
-
   constructor(agency) {
     this._agency = agency;
     const service = this.findServices(this._agency);
     this._service = promisifyAll(require(`services/${service}`));
-  }
-
-  load() {
   }
 
   /**
@@ -35,7 +31,6 @@ export default class Client {
    * @return {[number]} stops
    */
   findStops(token) {
-
     const resolve = (token, label) => {
       let streets = token.split(' ').filter(w => w != 'and');
       const intersection = require('lodash/intersection');
@@ -48,7 +43,10 @@ export default class Client {
     const filteredStops = stops.filter(num =>
       token === num || resolve(token, data.stops[num])
     );
-    console.log(filteredStops);
+    if (filteredStops.length === 0) {
+      const message = `could not find stops called ${token}.`;
+      return Promise.reject(new Error(message));
+    }
     return Promise.resolve(filteredStops);
   }
 
@@ -59,13 +57,14 @@ export default class Client {
         stops: Object.assign({},
                 ...routes.map(({ stops }) => stops)),
       };
-      routes.forEach(({ route, directions }) => data.routes[route] = directions);
+      routes.forEach(({ route, directions }) =>
+                     data.routes[route] = directions);
       return data;
     };
 
     return this.findRoutes().then(routes =>
       Promise.all(routes.slice(0, (n !== undefined ? n : routes.length))
-        .map(route => { console.time(route); return this.findRouteConfig(route); })
+        .map(route => this.findRouteConfig(route))
       ).then(cleanData)
     );
   }
@@ -89,21 +88,21 @@ export default class Client {
    *
    */
   findTimes(stopToken, route, direction) {
+    const flatten = require('lodash/flatten');
+
     return this.findStops(stopToken)
-      .then(stops =>
+      .then(stops => Promise.all(
+        stops.map(stop =>
           this._service.getTimes(this.agency,
             {
-              stop: stops[0],
+              stop,
               routeNum: route,
               direction,
-            })
-      );
+            }
+          )
+        )
+      ).then(predictions => flatten(predictions)));
 
-      /*
-     return Promise.all(stops.map(stop =>
-        .catch(e => console.log('--ERROR--', [e]))
-    ));
-   */
   }
 
   // Getters

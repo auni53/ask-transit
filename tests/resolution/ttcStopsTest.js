@@ -31,11 +31,18 @@ describe('class Client', function() {
 
       it('loads stop list for Ossington Station', function() {
         let token = 'ossington station';
-        let stops = ['15298'];
+        let stops = ['15298', '14743', '14744'];
         return ttcClient.findStops(token).should.eventually
           .include.members(stops);
       });
 
+      it('gets times for Ossington Station', function() {
+        let token = 'ossington station';
+        let stops = ['15298', '14743', '14744'];
+        return ttcClient.findTimes(token, undefined, undefined)
+              .should.eventually.satisfy(global.print)
+            ;
+      });
     });
 
     it('loads my street', function() {

@@ -13,17 +13,28 @@ export default class Transit {
     return say('Welcome to ASK transit');
   }
 
-  @Intent('GetTimes')
-  getTimes({ agency, stop, route, direction }) {
-    let client = new Client();
-    client.load(agency.toLowerCase());
-    const getMinute = times => (times != null
-                          ? Math.floor(times[0] / 60) + ''
-                          : 'nope');
-
+  @Intent('GetTimesNumber')
+  getTimesNumber({ agency, stop, route, direction }) {
+    let client = new Client(agency.toLowerCase());
     return client.findTimes(stop, route, direction)
             .then(p => say(interpret(p)))
-            .catch(error => say(error));
+            .catch(error => say(error.message));
+  }
+
+  @Intent('GetTimesLabel')
+  getTimesLabel({ agency, label, route, direction }) {
+    let client = new Client(agency.toLowerCase());
+    return client.findTimes(label.toLowerCase(), route, direction)
+            .then(p => say(interpret(p)))
+            .catch(error => say(error.message));
+  }
+
+  @Intent('GetTimesIntersection')
+  getTimesIntersection({ agency, streetA, streetB, route, direction }) {
+    let client = new Client(agency.toLowerCase());
+    return client.findTimes(`${streetA.toLowerCase()} ${streetB.toLowerCase()}`, route, direction)
+            .then(p => say(interpret(p)))
+            .catch(error => say(error.message));
   }
 
   @Intent('AMAZON.HelpIntent')
