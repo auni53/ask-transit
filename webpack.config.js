@@ -2,9 +2,12 @@ var path = require('path');
 
 var APP_DIR = path.resolve(__dirname, 'src/');
 var BUILD_DIR = path.resolve(__dirname, 'dist/');
+var ARTIFACTS_DIR = path.resolve(__dirname, 'bin/');
+
+var APP_ROOT = 'Transit.js';
 
 module.exports = {
-  entry: APP_DIR + '/Transit.js',
+  entry: APP_DIR + '/' + APP_ROOT,
   target: 'node',
   output: {
     libraryTarget: 'commonjs',
@@ -20,7 +23,8 @@ module.exports = {
   },
   resolve: {
     root: [
-      path.resolve(__dirname, 'src/')
+      APP_DIR,
+      ARTIFACTS_DIR
     ],
     extensions: ['', '.js', '.json', '.yml']
   }

@@ -16,15 +16,8 @@ export default class Transit {
   @Intent('GetTimesNumber')
   getTimesNumber({ agency, stop, route, direction }) {
     let client = new Client(agency.toLowerCase());
+    console.log(client);
     return client.findTimes(stop, route, direction)
-            .then(p => say(interpret(p)))
-            .catch(error => say(error.message));
-  }
-
-  @Intent('GetTimesLabel')
-  getTimesLabel({ agency, label, route, direction }) {
-    let client = new Client(agency.toLowerCase());
-    return client.findTimes(label.toLowerCase(), route, direction)
             .then(p => say(interpret(p)))
             .catch(error => say(error.message));
   }
@@ -33,6 +26,14 @@ export default class Transit {
   getTimesIntersection({ agency, streetA, streetB, route, direction }) {
     let client = new Client(agency.toLowerCase());
     return client.findTimes(`${streetA.toLowerCase()} ${streetB.toLowerCase()}`, route, direction)
+            .then(p => say(interpret(p)))
+            .catch(error => say(error.message));
+  }
+
+  @Intent('GetTimesLabel')
+  getTimesLabel({ agency, label, route, direction }) {
+    let client = new Client(agency.toLowerCase());
+    return client.findTimes(label.toLowerCase(), route, direction)
             .then(p => say(interpret(p)))
             .catch(error => say(error.message));
   }

@@ -1,7 +1,7 @@
 import { getRoutes, getStops, getTimes } from 'services/nextbus.js';
 import sample from '../sample/ttc';
 
-describe('TTC – nextbus service', () => {
+describe('nextbus service (TTC)', () => {
   const agency = 'ttc';
   let route = '94';
   let direction = 'E';
@@ -9,7 +9,8 @@ describe('TTC – nextbus service', () => {
 
   it('gets a list of routes', function() {
     return getRoutes(agency).should.eventually
-            .eql(sample.routes)
+            .have.members(sample.routes).and
+            .have.lengthOf(sample.routes.length)
           ;
   });
 

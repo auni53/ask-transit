@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
 export function get(url) {
+  console.log(url);
   return fetch(url)
       .then(r => r.ok
         ? Promise.resolve(r)

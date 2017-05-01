@@ -17,13 +17,13 @@ describe('Transit Skill', function() {
   it('gets intersection times', function() {
     return Transit(wrap(1)).should.eventually
       .have.deep.property('response.outputSpeech.text')
-      .satisfy(global.print);
+      ;
   });
 
   it('gets stop times', function() {
     return Transit(wrap(2)).should.eventually
-      // .have.deep.property('response.outputSpeech.text')
-      .satisfy(global.print);
+      .have.deep.property('response.outputSpeech.text')
+      ;
   });
 
 });

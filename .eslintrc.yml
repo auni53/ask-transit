@@ -10,7 +10,7 @@ parserOptions:
     sourceType: module
 parser: "babel-eslint"
 rules:
-    strict: 0
+    strict: 1
     indent:
         - warn
         - 2

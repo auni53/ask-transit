@@ -16,8 +16,7 @@ export function getRoutes(agency) {
   const query = 'body/route/@tag';
   const getQuery = doc => parse(doc, query).map(getValue);
 
-  return get(url)
-          .then(getQuery);
+  return get(url).then(getQuery);
 }
 
 /**

@@ -1,5 +1,6 @@
 import index from 'services/index';
 import { promisifyAll } from 'bluebird';
+import resolve from 'lib/search';
 import includes from 'lodash/includes';
 import flatten from 'lodash/flatten';
 
@@ -8,6 +9,8 @@ export default class Client {
     this._agency = agency;
     const service = this.findServices(this._agency);
     this._service = promisifyAll(require(`services/${service}`));
+
+    return this;
   }
 
   /**
@@ -19,8 +22,8 @@ export default class Client {
    * @return {[string]} services
    */
   findServices(agency) {
-    return Object.keys(index).filter(service =>
-                includes(index[service], agency));
+    return Object.keys(index)
+      .filter(service => includes(index[service], agency));
   }
 
   /**
@@ -31,14 +34,7 @@ export default class Client {
    * @return {[number]} stops
    */
   findStops(token) {
-    const resolve = (token, label) => {
-      let streets = token.split(' ').filter(w => w != 'and');
-      const intersection = require('lodash/intersection');
-
-      return (intersection(streets, label.split(' ')).length > 1);
-    };
-
-    const data = require(`../data/${this._agency}.json`);
+    const data = require(`data/${this._agency}.json`);
     const stops = Object.keys(data.stops);
     const filteredStops = stops.filter(num =>
       token === num || resolve(token, data.stops[num])
@@ -88,8 +84,6 @@ export default class Client {
    *
    */
   findTimes(stopToken, route, direction) {
-    const flatten = require('lodash/flatten');
-
     return this.findStops(stopToken)
       .then(stops => Promise.all(
         stops.map(stop =>
